@@ -1,0 +1,125 @@
+﻿@model IEnumerable<OrderDbFirst.Models.Order>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+
+<br />
+@using (Html.BeginForm("Index", "Orders", FormMethod.Get))
+{
+    <b>Select By : </b>
+    <select>
+        <option value="Products">Product</option>
+        <option value="Customers">Customer</option>
+    </select>
+    @Html.TextBox("search")<input type="submit" class="btn btn-success" value="Search" />
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </th>
+        <th>
+            @Html.DisplayName("Customer Name")
+        </th>
+        <th>
+            @Html.DisplayName("Product Name")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Customer.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Product.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.OrderID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.OrderID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.OrderID }, new { @class = "btn btn-danger", @data_toggle = "modal", @data_target = "#myModal" })
+        </td>
+    </tr>
+}
+
+</table>
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h3 class="modal-title">Edit</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="deleteForm">
+                    <div>
+                        <h4>Order</h4>
+                        <hr />
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.OrderDate)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.FirstOrDefault().OrderDate)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Customer.Name)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.FirstOrDefault().Customer.Name)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Product.Name)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.FirstOrDefault().Product.Name)
+                            </dd>
+
+                        </dl>
+
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-actions no-color">
+                                <input type="submit" value="Delete" class="btn btn-default" /> |
+                                @Html.ActionLink("Back to List", "Index")
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $()
+    });
+</script>

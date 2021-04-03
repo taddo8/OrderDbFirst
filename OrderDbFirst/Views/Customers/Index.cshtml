@@ -1,0 +1,218 @@
+﻿@model IEnumerable<OrderDbFirst.Models.Customer>
+
+@{
+    ViewBag.Title = "Index";
+    WebGrid grid = new WebGrid(Model, rowsPerPage: 10);
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<br />
+@using (Html.BeginForm("Index", "Customers", FormMethod.Get))
+{
+    <b>Search By : </b>
+    <select value="Name">Name</select>
+    
+    <br />
+    @Html.TextBox("search")<input type="submit" id="searchBtn" value="Search" />
+}
+<br />
+<table class="table table-bordered table-responsive">
+    <tr>
+        <th>
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm })
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Phone)
+        </th>
+        <th>
+            @Html.ActionLink("Email", "Index", new { sortOrder = ViewBag.EmailSortParm })
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th></th>
+    </tr>
+
+    @if (Model.Count() == 0)
+    {
+        <tr>
+            <td colspan="3" style="color:red">
+                No Match
+            </td>
+        </tr>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.CustomerID }) |
+                    <a href="#" class="btn btn-warning" data-toggle="modal" data-target="#myModal">Details</a> |
+                    <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</a>
+                    
+                </td>
+            </tr>
+        }
+    }
+    
+</table>
+
+@*DETAILS MODAL*@
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h3 class="modal-title">Details</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="detailModal">
+                    <div>
+                        <h4>Customer</h4>
+                        <hr />
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.FirstOrDefault().Name)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Phone)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.FirstOrDefault().Phone)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Email)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.FirstOrDefault().Email)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Address)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.FirstOrDefault().Address)
+                            </dd>
+
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @*<a href="#" id="btnSubmit" class="btn btn-success">Enter</a>*@
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+@*DELETE MODALS*@
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h3 class="modal-title">Delete</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                
+                    <div id="deleteThis">
+                        <h4>Customer</h4>
+                        
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.FirstOrDefault().Name)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Phone)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.FirstOrDefault().Phone)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Email)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.FirstOrDefault().Email)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Address)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.FirstOrDefault().Address)
+                            </dd>
+
+                        </dl>
+                    </div>
+</div>
+            <div class="modal-footer">
+                @*<a href="#" id="btnSubmit" class="btn btn-success">Enter</a>*@
+                <a href="#" id="btnDelete" class="btn btn-danger" onclick="DeleteCustomer()">Delete</button>
+                <a href="#" id="btnClose" class="btn btn-danger" data-dismiss="modal">Cancel</a>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="hiddenCustomerId" />
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var DeleteCustomer = function () {
+            var empId = $('#hiddenCustomerId').val();
+
+
+            $.ajax({
+                type: 'POST',
+                url: '/Customers/Delete',
+                data: empId,
+                success: function (result) {
+                    $('#deleteModal').modal('hide');
+                    $('#row_ + empId').remove();
+                }
+            })
+        }
+    });
+</script>

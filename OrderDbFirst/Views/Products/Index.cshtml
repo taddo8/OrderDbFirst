@@ -1,0 +1,43 @@
+﻿@model PagedList.IPagedList<OrderDbFirst.Models.Product>
+@using PagedList.Mvc;
+
+<link href="~/Content/PagedList.css" rel="stylesheet" />
+@{
+    ViewBag.Title = "Index";
+    WebGrid grid = new WebGrid(Model, rowsPerPage: 5);
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<div class="container">
+    <h2>Index</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <br />
+
+    @using (Html.BeginForm("Index", "Products", FormMethod.Get))
+    {
+        @Html.TextBox("search", ViewBag.CurrentFilter as string)<input type="submit" class="btn btn-success" value="Search" />
+    }
+    
+    <div>
+        @grid.Table(
+ tableStyle: "table table-responsive table-bordered",
+ columns: grid.Columns(
+     grid.Column(columnName: "Name", header: "Name", format: (item) => @Html.ActionLink(((string)item.Name), "Edit", new { id = item.ProductID })),
+     grid.Column(columnName: "Cost", header: "Cost")
+
+          )
+     )
+    </div>
+
+
+</div>
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, currentFilter = ViewBag.CurrentFilter }))
+
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery-3.4.1.js"></script>

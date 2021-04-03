@@ -1,0 +1,47 @@
+﻿@model OrderDbFirst.Models.DrinkViewModel
+@{
+    ViewBag.Title = "Create2";
+}
+
+<h2>Create2</h2>
+
+@using (Html.BeginForm("Create2", "Drinks"))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Drink.Customer)
+        @Html.TextBoxFor(m => m.Drink.Customer, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Drink.Drink1)
+        @Html.TextBoxFor(m => m.Drink.Drink1, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group" id="dropdownSize">
+        @Html.LabelFor(m => m.Sizes)
+        @Html.DropDownListFor(m => m.DrinkId, new SelectList(Model.Sizes, "SizeID", "Name"), "", new { @class = "form-control", id="dropDown" })
+    </div>
+}
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+
+<script>
+    $(document).ready(function () {
+        
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "/Drinks/Create2",
+            data: "{}",
+            dataType: "json",
+            success: function (result) {
+                $('#dropDown').empty();
+                $('#dropDown').append("<option value='0'>--Select--</option>");
+                each(result.d, function (key, value) {
+                    $('#dropDown').append($("<option><option>").val(value.SizeID).html(value.Name));
+                });
+            } 
+        });
+    });
+</script>

@@ -1,0 +1,178 @@
+﻿@model PagedList.IPagedList<OrderDbFirst.Models.Drink>
+
+@using PagedList.Mvc;
+
+<link href="~/Content/PagedList.css" rel="stylesheet" />
+@{
+    ViewBag.Title = "Index";
+    
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<h2>Drinks</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@using (Html.BeginForm("Index", "Drinks", FormMethod.Get))
+{
+    <b>Select By: </b>
+    <select>
+        <option value="Customer">Customer</option>
+        <option value="Drinks">Drinks</option>
+    </select>
+    @Html.TextBox("search", ViewBag.CurrentFilter as string)
+    <input type="submit" class="btn btn-success" value="Search" />
+}
+<table class="table table-bordered table-responsive">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Customer)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Drink1)
+        </th>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Size)
+        </th>
+
+    </tr>
+
+    @if (Model.Count() == 0)
+    {
+        <tr>
+            <td colspan="3" style="color:red">
+                No Match
+            </td>
+        </tr>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Drink1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Size)
+                </td>
+                
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.DrinkID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.DrinkID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.DrinkID })
+                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Open Modal</a> 
+                </td>
+            </tr>
+        }
+    }
+   
+</table>
+
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h3 class="modal-title">Edit</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FirstOrDefault().Customer, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.FirstOrDefault().Customer, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.FirstOrDefault().Customer, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FirstOrDefault().Drink1, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.FirstOrDefault().Drink1, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.FirstOrDefault().Drink1, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FirstOrDefault().Size, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.FirstOrDefault().Size, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.FirstOrDefault().Size, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                @*<a href="#" id="btnSubmit" class="btn btn-success">Enter</a>*@
+                <button type="submit" id="btnSubmit" class="btn btn-success">Edit</button>
+                <a href="#" id="btnClose" class="btn btn-danger" data-dismiss="modal">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*@<div class="modal" tabindex="-1" role="dialog" id="myModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Modal body text goes here.</p>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FirstOrDefault().Customer, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.FirstOrDefault().Customer, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.FirstOrDefault().Customer, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" id="btnSubmit" class="btn btn-success">Enter</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+*@
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, currentFilter = ViewBag.CurrentFilter }))
+
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#btnSubmit').on('click', function () {
+            var myEditForm = $('#editForm').serialize();
+                 
+            $.ajax({
+                type: "POST",
+                url: "/Drinks/Edit",
+                data: myEditForm,
+                success: function (data) {
+                    if(data.success)
+                    $('#myModal').modal('hide');
+                }
+               
+            });
+            return false;
+        });
+    }); 
+</script>

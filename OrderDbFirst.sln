@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderDbFirst", "OrderDbFirst\OrderDbFirst.csproj", "{1E3DF973-868F-4A4F-8968-90F6F6BF2189}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E3DF973-868F-4A4F-8968-90F6F6BF2189}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E3DF973-868F-4A4F-8968-90F6F6BF2189}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E3DF973-868F-4A4F-8968-90F6F6BF2189}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E3DF973-868F-4A4F-8968-90F6F6BF2189}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {999D507F-6F25-4D14-8FCE-A7ABE37DC3BA}
+	EndGlobalSection
+EndGlobal
